@@ -1,6 +1,7 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const errorHandler = require('../utils/error');
+const jwt = require('jsonwebtoken');
 
 const signup = async (req, res, next) => {
     try {
@@ -21,6 +22,36 @@ const signup = async (req, res, next) => {
     }
 };
 
+const signin = async (req,res,next) => {
+    let {email,password} = req.body;
+
+    try {
+        const user = await User.findOne({email});
+        if(!user){
+            return next(errorHandler(401, 'User not found!'));
+        }
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        if(!validPassword){
+            return next(errorHandler(401, 'Invalid password!'));
+        }
+        const token = jwt.sign({userId: user._id}, process.env.jwtSecret, {expiresIn: '2h'});
+
+        const {password: pass, ...userWithoutPassword} = user._doc;
+
+
+        res.cookie('accessToken',token,{httpOnly : true}).status(200).json({
+            message: "User successfully logged in!",
+            userWithoutPassword
+        })
+    } catch (error) {
+        next(errorHandler(500,error.message))
+    }
+
+}
+
+
 module.exports = {
-    signup
+    signup,
+    signin
 };
