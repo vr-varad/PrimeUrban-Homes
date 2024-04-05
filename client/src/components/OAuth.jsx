@@ -3,11 +3,11 @@ import {app} from '../firebase.js'
 import {useDispatch} from 'react-redux'
 import {signInSuccess} from '../redux/user/userslice.js'
 import axios from 'axios'
-import {Navigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 const OAuth = () => {
   const dispatch = useDispatch()
-  const navigate = Navigate()
+  const navigate = useNavigate()
   async function handleGoogle(){
     try {
       const provider = new GoogleAuthProvider()

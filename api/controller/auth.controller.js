@@ -50,8 +50,41 @@ const signin = async (req,res,next) => {
 
 }
 
+const google = async(req,res,next) => {
+    try {
+        const {displayName, email, photoURL} = req.body;
+        const user = await  User.findOne({email});
+        if(user){
+            const token = jwt.sign({userId: user._id}, process.env.jwtSecret, {expiresIn: '2h'});
+            const {password, ...userWithoutPassword} = user._doc;
+            return res.cookie('accessToken',token,{httpOnly : true}).status(200).json({
+                message: "User successfully logged in!",
+                userWithoutPassword
+            })
+        }else{
+            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const hashedPassword = await bcrypt.hash(generatedPassword, 10)
+            const newUser = await new User({
+                username: displayName.split(' ').join('').toLowerCase() + Math.floor(Math.random() * 1000),
+                email,
+                password: hashedPassword,
+                profilePicture : photoURL
+            });
+            await newUser.save();
+            const token = jwt.sign({userId: newUser._id}, process.env.jwtSecret, {expiresIn: '2h'});
+            const {password, ...userWithoutPassword} = newUser._doc;
+            return res.cookie('accessToken',token,{httpOnly : true}).status(200).json({
+                message: "User successfully logged in!",
+                userWithoutPassword
+            })
+        }
+    } catch (error) {
+        next(errorHandler(500,error.message))
+    }
+}
 
 module.exports = {
     signup,
-    signin
+    signin,
+    google
 };

@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    profilePicture: {
+      type: String,
+      default: "https://i.pinimg.com/736x/ce/30/61/ce3061daab82a47b57c38e8480aa0264.jpg",
+    },
   },
   { timestamps: true }
 );
