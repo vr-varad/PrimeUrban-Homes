@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {Link} from 'react-router-dom'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import OAuth from '../components/OAuth';
 
 
 const SignUp = () => {
@@ -68,6 +69,7 @@ const SignUp = () => {
         <button  className="bg-blue-500 p-4 rounded-full text-white uppercase hover:bg-blue-950 ">
         {loading ? "Loading..." : "Sign Up"}
         </button>
+        <OAuth/>
       </form>
       <div className="flex gap-2 mt-4 justify-center">
         <p>Have an account?</p>

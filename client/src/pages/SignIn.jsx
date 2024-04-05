@@ -3,6 +3,7 @@ import {Link,useNavigate} from 'react-router-dom'
 import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux'
 import {signInFailure,signInStart,signInSuccess} from '../redux/user/userslice'
+import OAuth from '../components/OAuth';
 
 
 
@@ -62,6 +63,7 @@ const SignIn = () => {
         <button  className="bg-blue-500 p-4 rounded-full text-white uppercase hover:bg-blue-950 ">
         {loading ? "Loading..." : "Sign In"}
         </button>
+        <OAuth/>
       </form>
       <div className="flex gap-2 mt-4 justify-center">
         <p>New User?</p>
