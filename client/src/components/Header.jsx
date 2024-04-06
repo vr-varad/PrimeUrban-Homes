@@ -4,7 +4,6 @@ import {useSelector} from "react-redux";
 
 const Header = () => {
   const {user} = useSelector(state => state.user);
-  console.log(user)
   return (
     <header className="bg-blue-100 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
