@@ -1,8 +1,38 @@
+const errorHandler = require('../utils/error')
+const bcrypt = require('bcrypt')
+const User = require('../models/user.model.js')    
+
 const test = (req, res) => {
     res.send('My name is varad')
 }
 
+const updateUser = async (req,res,next)=>{
+    if(req.params.id !== req.user.userId){
+        return next(errorHandler(401,'Unauthorized'));
+    }
+    try {
+        if(req.body.password){
+            req.body.password = bcrypt.hashSync(req.body.password,10);
+        }
+        const updatedUser = await User.findByIdAndUpdate(req.params.id,{$set : {
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password,
+            profilePicture: req.body.profilePicture
+        }},{new:true});
+        const {password,...userWithoutPassword} = updatedUser._doc;
+        res.status(200).json({
+            success: true,
+            userWithoutPassword
+        })
+    } catch (error) {
+        next(errorHandler(500,'Internal Server Error'))
+    }
+}
+
+
 
 module.exports = {
-    test
+    test,
+    updateUser
 }

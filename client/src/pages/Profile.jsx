@@ -78,6 +78,7 @@ const Profile = () => {
         }
         <input type="text" placeholder="username" defaultValue={user.userWithoutPassword.username} id="username" className="p-3 border-black border rounded-xl" />
         <input type="text" placeholder="email" defaultValue={user.userWithoutPassword.email} id="email" className="p-3 border-black border rounded-xl"/>
+        <input type="password" placeholder="password" id="password" className="p-3 border-black border rounded-xl"/>
         <button className="bg-blue-900 text-stone-50 p-3 rounded-lg uppercase">Submit</button>
       </form>
       <div className="flex justify-around mt-5">
