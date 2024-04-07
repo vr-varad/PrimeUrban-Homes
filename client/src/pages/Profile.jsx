@@ -3,15 +3,17 @@ import { useSelector } from "react-redux"
 import { useEffect, useRef, useState } from "react"
 import {getStorage, ref, uploadBytesResumable, getDownloadURL} from 'firebase/storage'
 import { useDispatch } from "react-redux"
-import {updateUserFailure,updateUserStart,updateUserSuccess} from '../redux/user/userslice'
+import {updateUserFailure,updateUserStart,updateUserSuccess,deleteUserFailure,deleteUserStart,deleteUserSuccess,signInFailure,signInStart,signInSuccess} from '../redux/user/userslice'
 import {app} from '../firebase'
 import axios from "axios"
+import {useNavigate, Link} from 'react-router-dom'
 
 const Profile = () => {
   const fileRef = useRef(null)
 
   const [file,setFile] = useState(undefined)
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   useEffect(()=>{
     if(file){
@@ -76,6 +78,30 @@ const Profile = () => {
     }
   }
 
+  async function handleDelete(){
+    alert("Are you sure you want to delete your account?")
+    try {
+      dispatch(deleteUserStart())
+      await axios.delete(`/api/user/delete/${user.userWithoutPassword._id}`)
+      dispatch(deleteUserSuccess())
+    } catch (error) {
+      dispatch(deleteUserFailure(error))
+      console.log(error)
+    }
+  }
+
+  async function handleSignOut(){
+    alert("Are you sure you want to sign out?")
+    try {
+      dispatch(signInStart())
+      await axios.get('/api/auth/signout')
+      dispatch(signInSuccess(null))
+      navigate('/sign-in')
+    } catch (error) {
+      dispatch(signInFailure(error))
+    }
+  }
+
 
 
   return (
@@ -103,13 +129,16 @@ const Profile = () => {
         <input type="text" onChange={handleChange} placeholder="username" defaultValue={user.userWithoutPassword.username} id="username" className="p-3 border-black border rounded-xl" />
         <input type="text" onChange={handleChange} placeholder="email" defaultValue={user.userWithoutPassword.email} id="email" className="p-3 border-black border rounded-xl"/>
         <input type="password" onChange={handleChange} placeholder="password" id="password" className="p-3 border-black border rounded-xl"/>
-        <button className="bg-blue-900 text-stone-50 p-3 rounded-lg uppercase">{loading?'Updating....':"Update"}</button>
+        <button className="bg-blue-500 text-stone-50 p-3 rounded-lg uppercase hover:bg-blue-900">{loading?'Updating....':"Update"}</button>
+        <Link to={'/create-listing'} className="bg-orange-400 p-3 rounded-xl uppercase text-center hover:bg-orange-800 text-white">
+          Create Listing
+        </Link>
       </form>
       <p className="text-red-500 text-center">{error?error:''}</p>
       {updateSuccess && <p className="text-green-500 text-center">Profile Updated Successfully</p>}
       <div className="flex justify-around mt-5">
-        <button className="bg-red-500 text-white p-2 rounded-lg">Delete Account</button>
-        <button className="bg-red-500 text-white p-2 rounded-lg pr-7 pl-7 ">Sign Out</button>
+        <button className="bg-red-500 text-white p-2 rounded-lg pr-7 pl-7 hover:bg-red-900" onClick={handleDelete}>{loading?"Deleting...":error?"Error":"Delete"}</button>
+        <button className="bg-red-500 text-white p-2 rounded-lg pr-7 pl-7 hover:bg-red-900" onClick={handleSignOut}>{loading?"Signing Out...":error?"Error":"Sign Out"}</button>
       </div>
     </div>
   )

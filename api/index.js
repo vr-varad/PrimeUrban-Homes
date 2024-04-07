@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser')
 
 const userRoutes = require('./routes/user.routes')
 const authRoutes = require('./routes/auth.routes')
+const listingRoutes = require('./routes/listing.routes')
 
 const app = express()
 
@@ -13,6 +14,7 @@ app.use(cookieParser())
 
 app.use('/api/user',userRoutes);
 app.use('/api/auth',authRoutes);
+app.use('/api/listing',listingRoutes);
 
 app.use((err,req,res,next)=>{
     const statusCode = err.statusCode || 500;

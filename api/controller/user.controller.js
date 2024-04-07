@@ -30,9 +30,26 @@ const updateUser = async (req,res,next)=>{
     }
 }
 
+const deleteUser = async (req,res,next)=>{
+    if(req.user.userId !== req.params.id){
+        return next(errorHandler(401,'Unauthorized'));
+    }
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.clearCookie('accessToken');
+        res.status(200).json({
+            success: true,
+            message: 'User has been deleted'
+        })
+        
+    } catch (error) {
+        return next(errorHandler(500,'Internal Server Error'));   
+    }
+}
 
 
 module.exports = {
     test,
-    updateUser
+    updateUser,
+    deleteUser
 }
