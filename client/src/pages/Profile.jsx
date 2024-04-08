@@ -10,11 +10,11 @@ import {useNavigate, Link} from 'react-router-dom'
 
 const Profile = () => {
   const fileRef = useRef(null)
-
+  
   const [file,setFile] = useState(undefined)
   const dispatch = useDispatch();
   const navigate = useNavigate()
-
+  
   useEffect(()=>{
     if(file){
       console.log(1)
@@ -51,11 +51,11 @@ const Profile = () => {
       setFileUploadError(error)
     }, () => {
       getDownloadURL(upload.snapshot.ref).then((downloadURL) => {
-        console.log("downloadUrl",downloadURL)
         setFormData(prevFormData => ({...prevFormData, profilePicture: downloadURL}))
       })
     })
   }
+
 
   function handleChange(e){
     setFormData(prevFormData => ({...prevFormData, [e.target.id]: e.target.value}))
@@ -109,7 +109,7 @@ const Profile = () => {
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         <input type="file" accept="image/*" ref={fileRef} hidden onChange={(e)=>setFile(e.target.files[0])} />
-        <img src={user.userWithoutPassword.profilePicture} alt="profile_picture" onClick={()=>fileRef.current.click()} className="rounded-full h-50 w-50 object-cover mx-auto cursor-pointer self-center mt-2" />
+        <img src={formData.profilePicture || user.userWithoutPassword.profilePicture} alt="profile_picture" onClick={()=>fileRef.current.click()} className="rounded-full h-50 w-50 object-cover mx-auto cursor-pointer self-center mt-2" />
         {fileUploadError ?
           <p className="text-red-500 text-center">Error Uploading the image</p>
           : progress > 0 && progress < 100 ? (
