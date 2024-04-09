@@ -1,6 +1,7 @@
 const errorHandler = require('../utils/error')
 const bcrypt = require('bcrypt')
 const User = require('../models/user.model.js')    
+const Listing = require('../models/listing.model.js')
 
 const test = (req, res) => {
     res.send('My name is varad')
@@ -47,9 +48,27 @@ const deleteUser = async (req,res,next)=>{
     }
 }
 
+const getUserListing = async (req,res,next)=>{
+    if(req.user.userId !== req.params.id){
+        return next(errorHandler(401,'Unauthorized'));
+    }
+    try {
+        const listings = await Listing.find({userRefernce: req.params.id});
+        res.status(200).json({
+            success: true,
+            listings
+        })
+        
+    } catch (error) {
+        next(errorHandler(500,'Internal Server Error'))
+        
+    }
+}
+
 
 module.exports = {
     test,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserListing
 }

@@ -134,7 +134,7 @@ const Profile = () => {
           Create Listing
         </Link>
       </form>
-      <p className="text-red-500 text-center">{error?error:''}</p>
+      {error && <p className="text-red-500">{error}</p>}
       {updateSuccess && <p className="text-green-500 text-center">Profile Updated Successfully</p>}
       <div className="flex justify-around mt-5">
         <button className="bg-red-500 text-white p-2 rounded-lg pr-7 pl-7 hover:bg-red-900" onClick={handleDelete}>{loading?"Deleting...":error?"Error":"Delete"}</button>

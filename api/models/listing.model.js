@@ -14,10 +14,6 @@ const listingSchema = new mongoose.Schema(
             trim: true,
             minlength: 10
         },
-        price : {
-            type: Number,
-            required: true
-        },
         regularPrice : {
             type: Number,
             required: true
