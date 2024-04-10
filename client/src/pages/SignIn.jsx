@@ -71,7 +71,7 @@ const SignIn = () => {
           <span className="text-blue-800">Sign-Up</span>
         </Link>
       </div>
-      {error ? <p className='text-red-500 m'>{error}</p>: ""}
+      {error ? <p className='text-red-500 m'>{JSON.stringify(error.message)}</p>: ""}
     </div>
   );
 }

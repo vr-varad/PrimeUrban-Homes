@@ -26,6 +26,9 @@ const Profile = () => {
   const [fileUploadError, setFileUploadError] = useState(null) 
   const [formData, setFormData] = useState({})
   const [updateSuccess, setUpdateSuccess] = useState(false)
+  const [showListingError, setShowListingError] = useState(false)
+  const [userListing, setUserListing] = useState([])
+
   
   const handleFileUpload = async (file) => {
     const storage = getStorage(app);
@@ -102,7 +105,28 @@ const Profile = () => {
     }
   }
 
+  async function handleShowListing(){
+    try {
+      setShowListingError(false)
+      const response = await axios.get(`/api/user/listing/${user.userWithoutPassword._id}`);
+      setUserListing(response.data.listings)
+      console.log(userListing)
 
+      
+    } catch (error) {
+      setShowListingError(error)
+    }
+  }
+
+  async function handleDeleteListing(e){
+    const listingId = e.target.parentElement.parentElement.children[0].href.split('/')[4]
+    try {
+      await axios.delete(`/api/listing/delete/${listingId}`)
+      setUserListing(prevUserListing => prevUserListing.filter(listing => listing._id !== listingId))
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -134,12 +158,36 @@ const Profile = () => {
           Create Listing
         </Link>
       </form>
-      {error && <p className="text-red-500">{error}</p>}
-      {updateSuccess && <p className="text-green-500 text-center">Profile Updated Successfully</p>}
+      {error ? <p className="text-red-500">{JSON.stringify(error.message)}</p>: ""}
       <div className="flex justify-around mt-5">
-        <button className="bg-red-500 text-white p-2 rounded-lg pr-7 pl-7 hover:bg-red-900" onClick={handleDelete}>{loading?"Deleting...":error?"Error":"Delete"}</button>
-        <button className="bg-red-500 text-white p-2 rounded-lg pr-7 pl-7 hover:bg-red-900" onClick={handleSignOut}>{loading?"Signing Out...":error?"Error":"Sign Out"}</button>
+        <button className="bg-red-500 text-white p-2 rounded-lg pr-7 pl-7 hover:bg-red-900" onClick={handleDelete}>{loading?"Deleting...":"Delete"}</button>
+        <button className="bg-red-500 text-white p-2 rounded-lg pr-7 pl-7 hover:bg-red-900" onClick={handleSignOut}>{loading?"Signing Out...":"Sign Out"}</button>
       </div>
+      {updateSuccess && <p className="text-green-500 text-center">Profile Updated Successfully</p>}
+      <button onClick={handleShowListing} className="bg-green-400 text-white rounded-lg p-3 pl-48 pr-48 my-8 mb-10 border hover:bg-green-800 " >Show Listings</button>
+      {showListingError && <p className="text-red-500 text-center">Error Showing Listing...</p>}
+      {userListing && userListing.length > 0  ? (
+        <div className="flex flex-col gap-4 mb-10">
+          <h1 className="text-2xl font-semibold text-center mb-5">Listings</h1>
+          {userListing.map((listing)=>(
+            <div key={listing._id}>
+              <Link to={`/listing/${listing._id}`}>
+                <img src={listing.images[0]} alt="listing" className="w-full h-48 object-cover" />
+              </Link>
+              <Link to={`/listing/${listing._id}`} className="text-blue-800 font-semibold hover:underline truncate">
+                <p>{listing.name}</p>
+              </Link>
+              <div className="flex flex-row justify-between">
+                <button onClick={handleDeleteListing} className=" uppercase bg-red-500 p-2 rounded-lg text-white">Delete</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="bg-blue-600 p-2 rounded-lg text-white uppercase">Update</button>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+        ):"No Listings Found"
+      }
     </div>
   )
 }
