@@ -2,12 +2,14 @@ const express = require('express')
 const mongoose = require('mongoose')
 const dotenv = require('dotenv').config()
 const cookieParser = require('cookie-parser')
+const path = require('path')
 
 const userRoutes = require('./routes/user.routes')
 const authRoutes = require('./routes/auth.routes')
 const listingRoutes = require('./routes/listing.routes')
 
 const app = express()
+const __dirname = path.resolve()
 
 app.use(express.json())
 app.use(cookieParser())
@@ -15,6 +17,13 @@ app.use(cookieParser())
 app.use('/api/user',userRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/listing',listingRoutes);
+
+app.use(express.static(path.join(__dirname, 'client/build')))
+
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'))
+}
 
 app.use((err,req,res,next)=>{
     const statusCode = err.statusCode || 500;
@@ -41,5 +50,6 @@ const start = async () => {
         console.log('Failed to start server', error)
     }
 }
+
 
 start()

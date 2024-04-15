@@ -21,23 +21,24 @@ const SignIn = () => {
     e.preventDefault();
     try {
       dispatch(signInStart())
+      console.log(4)
       const response = await axios.post('/api/auth/signin', formData, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      console.log(response)
+      console.log(2)
       if(response){
+        console.log(1)
         dispatch(signInSuccess(response.data))
         dispatch(signInFailure(null))
 
         navigate('/')
       }
+
+      console.log(error)
     } catch (error) {
-      const err = error.response.data;
-      if(err.success == false){
-        dispatch(signInFailure(err.message))
-      }
+      dispatch(signInFailure(error.message))
     }
   }
   

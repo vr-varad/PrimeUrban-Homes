@@ -115,8 +115,6 @@ const CreateListing = () => {
         }
     }
 
-    console.log(formData)
-
     async function handleSubmit(e){
         e.preventDefault();
         try {
@@ -137,7 +135,7 @@ const CreateListing = () => {
                 }
             })
             console.log(response)
-            navigate('/listings/'+response.data.listing._id)
+            navigate('/listing/'+response.data.listing._id)
             setLoading(false)
         } catch (error) {
             setError(error.message)

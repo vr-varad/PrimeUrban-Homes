@@ -14,6 +14,11 @@ const listingSchema = new mongoose.Schema(
             trim: true,
             minlength: 10
         },
+        address : {
+            type: String,
+            required: true,
+            trim: true
+        },
         regularPrice : {
             type: Number,
             required: true
@@ -46,6 +51,16 @@ const listingSchema = new mongoose.Schema(
             type : String,
             required: true
         },
+        bathrooms : {
+            type : Number,
+            default : 1,
+            required : true
+        },
+        parking : {
+            type : Boolean,
+            default : false,
+            required : true
+        }
         
     },
     { timestamps: true }

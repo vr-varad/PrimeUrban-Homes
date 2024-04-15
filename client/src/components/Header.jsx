@@ -13,14 +13,6 @@ const Header = () => {
             <span className="text-blue-700">Homes</span>
           </h1>
         </Link>
-        <form className="bg-slate-100 p-3 rounded-lg flex items-center">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="bg-transparent focus:outline-none w-24 sm:w-64 p-2"
-          />
-          <FaSearch className="text-blue-600" />
-        </form>
         <ul className="flex gap-10">
           <Link
             to={"/"}

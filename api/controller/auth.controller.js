@@ -45,6 +45,7 @@ const signin = async (req,res,next) => {
             userWithoutPassword
         })
     } catch (error) {
+        console.log(error)
         next(errorHandler(500,error.message))
     }
 
