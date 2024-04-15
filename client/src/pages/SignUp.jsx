@@ -3,12 +3,15 @@ import {Link} from 'react-router-dom'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import OAuth from '../components/OAuth';
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 
 const SignUp = () => {
   const [formData, setFormdata] = useState({});
   const [error,setError] =  useState(null);
   const [loading,setloading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate()
 
@@ -59,13 +62,26 @@ const SignUp = () => {
           id="email"
           onChange={handleChange}
         />
+        <div className='flex justify-between items-center'>
         <input
-          type="password"
+          type={!showPassword ? "password":"text"}
           placeholder="Password"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg w-96"
           id="password"
           onChange={handleChange}
         />
+        {showPassword ? (
+          <FaEyeSlash
+            className="right-4 top-4 text-blue-900 cursor-pointer " size={30}
+            onClick={() => setShowPassword(!showPassword)}
+          />
+        ) : (
+          <FaEye
+            className="right-4 top-4 text-blue-900 cursor-pointer" size={30}
+            onClick={() => setShowPassword(!showPassword)}
+          />
+        )}
+        </div>
         <button  className="bg-blue-500 p-4 rounded-full text-white uppercase hover:bg-blue-950 ">
         {loading ? "Loading..." : "Sign Up"}
         </button>

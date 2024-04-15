@@ -4,12 +4,15 @@ import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux'
 import {signInFailure,signInStart,signInSuccess} from '../redux/user/userslice'
 import OAuth from '../components/OAuth';
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 
 
 const SignIn = () => {
   const [formData, setFormdata] = useState({});
   const {loading,error} = useSelector((state)=>state.user)
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -54,13 +57,26 @@ const SignIn = () => {
           id="email"
           onChange={handleChange}
         />
+        <div className='flex justify-between items-center'>
         <input
-          type="password"
+          type={!showPassword ? "password":"text"}
           placeholder="Password"
-          className="border p-3 rounded-lg"
+          className="border p-3 rounded-lg w-96"
           id="password"
           onChange={handleChange}
         />
+        {showPassword ? (
+          <FaEyeSlash
+            className="right-4 top-4 text-blue-900 cursor-pointer " size={30}
+            onClick={() => setShowPassword(!showPassword)}
+          />
+        ) : (
+          <FaEye
+            className="right-4 top-4 text-blue-900 cursor-pointer" size={30}
+            onClick={() => setShowPassword(!showPassword)}
+          />
+        )}
+        </div>
         <button  className="bg-blue-500 p-4 rounded-full text-white uppercase hover:bg-blue-950 ">
         {loading ? "Loading..." : "Sign In"}
         </button>

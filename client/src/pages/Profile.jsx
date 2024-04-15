@@ -7,6 +7,9 @@ import {updateUserFailure,updateUserStart,updateUserSuccess,deleteUserFailure,de
 import {app} from '../firebase'
 import axios from "axios"
 import {useNavigate, Link} from 'react-router-dom'
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
 
 const Profile = () => {
   const fileRef = useRef(null)
@@ -28,6 +31,7 @@ const Profile = () => {
   const [updateSuccess, setUpdateSuccess] = useState(false)
   const [showListingError, setShowListingError] = useState(false)
   const [userListing, setUserListing] = useState([])
+  const [showPassword, setShowPassword] = useState(false);
 
   
   const handleFileUpload = async (file) => {
@@ -35,6 +39,7 @@ const Profile = () => {
     const fileName = new Date().getTime() + file.name
     const storageRef = ref(storage, `profilePictures/${fileName}`)
     const upload = uploadBytesResumable(storageRef, file)
+
 
 
     upload.on('state_changed', (snapshot) => {
@@ -152,7 +157,26 @@ const Profile = () => {
         }
         <input type="text" onChange={handleChange} placeholder="username" defaultValue={user.userWithoutPassword.username} id="username" className="p-3 border-black border rounded-xl" />
         <input type="text" onChange={handleChange} placeholder="email" defaultValue={user.userWithoutPassword.email} id="email" className="p-3 border-black border rounded-xl"/>
-        <input type="password" onChange={handleChange} placeholder="password" id="password" className="p-3 border-black border rounded-xl"/>
+        <div className='flex justify-between items-center'>
+        <input
+          type={!showPassword ? "password":"text"}
+          placeholder="Password"
+          className="border p-3 rounded-lg w-96"
+          id="password"
+          onChange={handleChange}
+        />
+        {showPassword ? (
+          <FaEyeSlash
+            className="right-4 top-4 text-blue-900 cursor-pointer " size={30}
+            onClick={() => setShowPassword(!showPassword)}
+          />
+        ) : (
+          <FaEye
+            className="right-4 top-4 text-blue-900 cursor-pointer" size={30}
+            onClick={() => setShowPassword(!showPassword)}
+          />
+        )}
+        </div>
         <button className="bg-blue-500 text-stone-50 p-3 rounded-lg uppercase hover:bg-blue-900">{loading?'Updating....':"Update"}</button>
         <Link to={'/create-listing'} className="bg-orange-400 p-3 rounded-xl uppercase text-center hover:bg-orange-800 text-white">
           Create Listing
