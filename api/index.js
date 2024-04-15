@@ -8,7 +8,6 @@ const userRoutes = require('./routes/user.routes')
 const authRoutes = require('./routes/auth.routes')
 const listingRoutes = require('./routes/listing.routes')
 
-// const __dirname = path.resolve()
 const app = express()
 
 app.use(express.json())
@@ -18,11 +17,11 @@ app.use('/api/user',userRoutes);
 app.use('/api/auth',authRoutes);
 app.use('/api/listing',listingRoutes);
 
-app.use(express.static(path.join(__dirname, 'client/build')))
+app.use(express.static(path.join(__dirname, '../client/build')))
 
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'))
+    res.sendFile(path.join(__dirname, '../client/build/index.html'))
 })
 
 app.use((err,req,res,next)=>{
