@@ -8,8 +8,8 @@ const userRoutes = require('./routes/user.routes')
 const authRoutes = require('./routes/auth.routes')
 const listingRoutes = require('./routes/listing.routes')
 
+// const __dirname = path.resolve()
 const app = express()
-const __dirname = path.resolve()
 
 app.use(express.json())
 app.use(cookieParser())
