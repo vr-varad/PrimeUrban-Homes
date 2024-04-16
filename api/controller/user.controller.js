@@ -100,7 +100,7 @@ const forgotPassword = async(req, res, next) => {
                 from: 'varadgupta21@gmail.com', 
                 to: email,
                 subject: "PrimeUrban Homes Reset Password",
-                text: `Reset Password Link : http://localhost:5173/reset-password/${user._id}/${token}`,
+                text: `Reset Password Link : https://primeurban-homes.onrender.com/reset-password/${user._id}/${token}`,
             });
         }  
         main().catch(console.error);
