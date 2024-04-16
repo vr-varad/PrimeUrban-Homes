@@ -11,6 +11,8 @@ router.get('/:id',userController.getUser)
 router.post('/update/:id',verifyToken,userController.updateUser)
 router.delete('/delete/:id',verifyToken,userController.deleteUser)
 router.get('/listing/:id',verifyToken,userController.getUserListing)
+router.get('/forgot-password/:email',userController.forgotPassword)
+router.post('/reset-password/:userId/:token',userController.resetPassword)
 
 
 module.exports = router     

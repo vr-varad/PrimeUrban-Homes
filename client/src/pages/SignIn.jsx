@@ -82,11 +82,19 @@ const SignIn = () => {
         </button>
         <OAuth/>
       </form>
-      <div className="flex gap-2 mt-4 justify-center">
+      <div className="flex gap-2 mt-4 justify-between">
+        <div className='flex gap-2'>
         <p>New User?</p>
-        <Link to={'/sign-up'}>
-          <span className="text-blue-800">Sign-Up</span>
-        </Link>
+          <Link to={'/sign-up'}>
+            <span className="text-blue-800">Sign-Up</span>
+          </Link>
+        </div>
+        <div className='flex gap-2'>
+          <p>Forgot Password?</p>
+          <Link to={'/forgot-password'}>
+            <span className="text-blue-800">Reset Password</span>
+          </Link>
+        </div>
       </div>
       {error ? <p className='text-red-500 m'>{JSON.stringify(error.message)}</p>: ""}
     </div>
